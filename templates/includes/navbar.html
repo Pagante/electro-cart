@@ -1,0 +1,33 @@
+		<!-- NAVIGATION -->
+		<nav id="navigation">
+			<!-- container -->
+			<div class="container">
+				<!-- responsive-nav -->
+				<div id="responsive-nav">
+					<!-- NAV -->
+					<ul class="main-nav nav navbar-nav">
+						<li class="active"><a href="{% url 'home' %}">Home</a></li>
+						<li><a href="#">Hot Deals</a></li>
+						<li class="dropdown">
+							
+							<a href="" class="dropdown-toggle" data-toggle="dropdown">Categories</a>
+							<ul class="dropdown-menu">
+								<li><a href="{% url 'store' %}">All Categories</a></li>
+								{% for category in links %}
+								<li><a href="{{category.get_url}}">{{category.category_name}}</a></li>
+								{% endfor %}
+							</ul>
+
+						</li>
+						<li><a href="#">Laptops</a></li>
+						<li><a href="#">Smartphones</a></li>
+						<li><a href="#">Cameras</a></li>
+						<li><a href="#">Accessories</a></li>
+					</ul>
+					<!-- /NAV -->
+				</div>
+				<!-- /responsive-nav -->
+			</div>
+			<!-- /container -->
+		</nav>
+		<!-- /NAVIGATION -->
