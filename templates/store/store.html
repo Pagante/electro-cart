@@ -8,13 +8,19 @@
 		<div id="breadcrumb" class="section">
 			<!-- container -->
 			<div class="container">
+				
 				<!-- row -->
 				<div class="row">
 					<div class="col-md-12">
 						<ul class="breadcrumb-tree">
 							<li><a href="{% url 'home' %}">Home</a></li>
+							{% if 'search' in request.path %}
+							<li><a href="{% url 'store' %}">Search Results</a></li>
+                            <li class="active">{{product_count}} <b>Results</b></li>
+							{% else %}
 							<li><a href="{% url 'store' %}">Store</a></li>
                             <li class="active">{{product_count}} <b>Results</b></li>
+							{% endif %}
 						</ul>
 					</div>
 				</div>
@@ -61,6 +67,7 @@
 						<!-- store products -->
 						<div class="row">
 							<!-- product -->
+							{% if products %}
                             {% for product in products %}
 							<div class="col-md-4 col-xs-6">
 								<div class="product">
@@ -90,25 +97,47 @@
 										</div>
 									</div>
 									<div class="add-to-cart">
-										<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+										<a href="{{product.get_url}}">
+											<button class="add-to-cart-btn"><i class="fa fa-eye"></i> View Details</button>
+										</a>
 									</div>
 								</div>
 							</div>
                             {% endfor %}
+							{% else %}
+							<div>
+								<h2>No Result Found. Please Try Again.</h2>
+							</div>
+							{% endif %}
 							<!-- /product -->
 						</div>
 						<!-- /store products -->
 
 						<!-- store bottom filter -->
 						<div class="store-filter clearfix">
-							<span class="store-qty">Showing 20-100 products</span>
+							{% if products.has_other_pages %}
 							<ul class="store-pagination">
-								<li class="active">1</li>
-								<li><a href="#">2</a></li>
-								<li><a href="#">3</a></li>
-								<li><a href="#">4</a></li>
-								<li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+									{% if products.has_previous %}
+								<li class="page-item"><a class="page-link" href="?page={{products.previous_page_number}}">Prev</a></li>
+									{% else %}
+									<li class="page-item disabled"><a class="page-link" href="">Prev</a></li>
+									{% endif %}
+
+									{% for i in products.paginator.page_range %}
+										{% if products.number == i %}
+										<li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+										{% else %}
+											<li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+										{% endif %}
+								{% endfor %}
+
+									{% if products.has_next %}
+									<li class="page-item"><a class="page-link" href="?page={{products.next_page_number}}">Next</a></li>
+									{% else %}
+										<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+									{% endif %}
 							</ul>
+							{% endif %}
 						</div>
 						<!-- /store bottom filter -->
 					</div>
